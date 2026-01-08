@@ -1,0 +1,300 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Fonts: 'Quicksand' is rounded/adorable, 'Orbitron' is cyber/tech -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+<style>
+    /* --- THEME CONFIGURATION BASED ON LOGO --- */
+    :root {
+        --k-blue: #0044aa;       /* The deep blue from the logo */
+        --k-silver: #e6e9f0;     /* The rim of the logo */
+        --k-glow: #00ccff;       /* Cyber accent */
+        --bg-dark: #0a0e17;      /* Deep space background */
+        --glass: rgba(255, 255, 255, 0.08);
+        --text-white: #ffffff;
+        --radius-cute: 30px;     /* Super rounded corners */
+    }
+
+    body {
+        margin: 0;
+        padding: 20px;
+        background: radial-gradient(circle at top center, #1a2a44, var(--bg-dark));
+        font-family: 'Quicksand', sans-serif;
+        color: var(--text-white);
+        min-height: 100vh;
+    }
+
+    /* --- LAYOUT --- */
+    .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    /* --- LOGO SECTION --- */
+    .logo-area {
+        margin-bottom: 30px;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    /* This class styles your 'K' logo */
+    .brand-logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%; /* Ensures it stays perfectly round */
+        box-shadow: 0 0 25px var(--k-blue), inset 0 0 10px rgba(255,255,255,0.5);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .brand-logo:hover {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 0 40px var(--k-glow);
+    }
+
+    /* --- SEARCH BAR --- */
+    .search-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 50px;
+    }
+
+    .cyber-search {
+        background: var(--glass);
+        backdrop-filter: blur(12px);
+        padding: 8px;
+        border-radius: 50px;
+        border: 2px solid var(--k-blue);
+        display: flex;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 0 15px rgba(0, 68, 170, 0.3);
+        transition: 0.3s;
+    }
+
+    .cyber-search:focus-within {
+        box-shadow: 0 0 25px var(--k-glow);
+        border-color: var(--k-glow);
+        transform: scale(1.02);
+    }
+
+    .search-input {
+        background: transparent;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        font-family: 'Quicksand', sans-serif;
+        font-size: 1rem;
+        flex-grow: 1;
+        outline: none;
+    }
+
+    .search-btn {
+        background: linear-gradient(135deg, var(--k-blue), #0077ff);
+        border: none;
+        border-radius: 50px;
+        padding: 10px 25px;
+        color: white;
+        font-family: 'Orbitron', sans-serif;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .search-btn:hover {
+        filter: brightness(1.2);
+        box-shadow: 0 0 10px var(--k-glow);
+    }
+
+    /* --- PRODUCT GRID --- */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 30px;
+        margin-bottom: 50px;
+    }
+
+    .card {
+        background: var(--glass);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: var(--radius-cute);
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        background: rgba(0, 68, 170, 0.2);
+        border-color: var(--k-glow);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    /* Neon line at top of card */
+    .card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, var(--k-glow), transparent);
+        opacity: 0;
+        transition: 0.3s;
+    }
+    .card:hover::before { opacity: 1; }
+
+    .card h3 a {
+        text-decoration: none;
+        color: var(--text-white);
+        font-size: 1.3rem;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .price-tag {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--k-glow);
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin: 10px 0;
+        text-shadow: 0 0 5px var(--k-blue);
+    }
+
+    .add-btn {
+        background: var(--k-silver);
+        color: var(--k-blue);
+        text-decoration: none;
+        padding: 12px;
+        border-radius: 20px;
+        font-weight: bold;
+        transition: 0.3s;
+        display: block;
+        margin-top: auto;
+    }
+
+    .add-btn:hover {
+        background: var(--text-white);
+        box-shadow: 0 0 15px white;
+        transform: scale(1.05);
+    }
+
+    /* --- PAGINATION --- */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.9rem;
+    }
+
+    .pag-btn {
+        color: var(--k-silver);
+        text-decoration: none;
+        padding: 10px 20px;
+        border-radius: 50px;
+        border: 1px solid var(--k-blue);
+        transition: 0.3s;
+    }
+
+    .pag-btn:hover {
+        background: var(--k-blue);
+        color: white;
+        box-shadow: 0 0 15px var(--k-blue);
+    }
+
+    /* Divider styling */
+    hr {
+        border: 0;
+        height: 1px;
+        background-image: linear-gradient(to right, transparent, var(--k-blue), transparent);
+        margin: 40px 0;
+        opacity: 0.6;
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LOGO AREA -->
+    <div class="logo-area">
+        <!-- 
+           IMPORTANT: Replace 'YOUR_LOGO_URL_HERE' with the actual link to your logo image.
+           If the logo is in your static folder, use: {% static 'images/logo.png' %} 
+        -->
+        <img src="https://i.postimg.cc/WbNq32z7/k-logo-placeholder.png" alt="K Logo" class="brand-logo">
+    </div>
+
+    <!-- SEARCH FORM -->
+    <div class="search-wrapper">
+        <form method="get" class="cyber-search">
+            <input type="text" name="q" class="search-input" placeholder="Search the collection..." value="{{ query|default:'' }}">
+            <button type="submit" class="search-btn">SEARCH</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <!-- PRODUCT GRID -->
+    <div class="grid">
+        {% for product in page_obj %}
+        <div class="card">
+            <h3>
+                <a href="{% url 'products:product_detail' product.slug %}">
+                    {{ product.name }}
+                </a>
+            </h3>
+            
+            <!-- Price with Cyber Font -->
+            <div class="price-tag">${{ product.price }}</div>
+
+            <a href="{% url 'cart_add' product.id %}" class="add-btn">
+                Add to Cart
+            </a>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1/-1; padding: 20px; color: #888;">
+            No items found matching your query.
+        </div>
+        {% endfor %}
+    </div>
+
+    <hr>
+
+    <!-- PAGINATION -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}" class="pag-btn">
+                &lt; Prev
+            </a>
+        {% endif %}
+
+        <span style="color: var(--k-glow);">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}" class="pag-btn">
+                Next &gt;
+            </a>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

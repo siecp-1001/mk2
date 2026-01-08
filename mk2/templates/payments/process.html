@@ -1,0 +1,12 @@
+<form method="post">
+  {% csrf_token %}
+  <script
+    src="https://checkout.stripe.com/checkout.js"
+    class="stripe-button"
+    data-key="YOUR_STRIPE_PUBLIC_KEY"
+    data-amount="5000"
+    data-name="My Store"
+    data-description="Order Payment"
+    data-currency="usd">
+  </script>
+</form>

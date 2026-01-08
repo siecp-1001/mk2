@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Fonts: Quicksand (Cute/Round) & Orbitron (Cyber/Tech) -->
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --k-blue: #0044aa;
+        --k-glow: #00ccff;
+        --k-silver: #e6e9f0;
+        --bg-dark: #0a0e17;
+        --glass: rgba(255, 255, 255, 0.08);
+        --text-white: #ffffff;
+        --danger: #ff4757; /* Cute Red for 'Remove' */
+    }
+
+    body {
+        margin: 0;
+        padding: 20px;
+        background: radial-gradient(circle at top center, #1a2a44, var(--bg-dark));
+        font-family: 'Quicksand', sans-serif;
+        color: var(--text-white);
+        min-height: 100vh;
+    }
+
+    .cart-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        text-shadow: 0 0 15px var(--k-blue);
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    /* --- CART ITEMS (CAPSULES) --- */
+    .cart-item {
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 50px; /* Fully rounded "capsule" look */
+        padding: 15px 30px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        flex-wrap: wrap; /* Responsive wrapping */
+        gap: 15px;
+    }
+
+    .cart-item:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 20px rgba(0, 68, 170, 0.4);
+        border-color: var(--k-glow);
+    }
+
+    .item-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        flex-grow: 1;
+        min-width: 150px;
+    }
+
+    .item-math {
+        color: var(--k-silver);
+        font-size: 0.9rem;
+    }
+
+    .item-total {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--k-glow);
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin: 0 20px;
+        text-shadow: 0 0 5px var(--k-blue);
+    }
+
+    /* --- BUTTONS --- */
+    .btn-remove {
+        background: rgba(255, 71, 87, 0.2);
+        color: var(--danger);
+        text-decoration: none;
+        padding: 8px 20px;
+        border-radius: 30px;
+        border: 1px solid var(--danger);
+        font-size: 0.85rem;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .btn-remove:hover {
+        background: var(--danger);
+        color: white;
+        box-shadow: 0 0 15px var(--danger);
+    }
+
+    /* --- SUMMARY SECTION --- */
+    .cart-summary {
+        margin-top: 40px;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0, 68, 170, 0.2));
+        border-radius: 30px;
+        padding: 30px;
+        text-align: right;
+        border-top: 2px solid var(--k-glow);
+    }
+
+    .total-label {
+        font-size: 1.2rem;
+        margin-right: 15px;
+    }
+
+    .grand-total {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 2.5rem;
+        color: white;
+        text-shadow: 0 0 20px var(--k-glow);
+    }
+
+    /* --- DIVIDER --- */
+    hr {
+        border: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--k-blue), transparent);
+        margin: 30px 0;
+        opacity: 0.5;
+    }
+
+    /* Mobile adjustments */
+    @media (max-width: 600px) {
+        .cart-item {
+            border-radius: 20px; /* Less round on phone to save space */
+            flex-direction: column;
+            text-align: center;
+        }
+        .cart-summary {
+            text-align: center;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="cart-container">
+
+    <h2>Your Cart</h2>
+
+    <!-- If cart is empty (Optional check logic) -->
+    {% if not cart %}
+        <div style="text-align: center; color: #888;">
+            <p>Your inventory is empty.</p>
+            <a href="/" style="color: var(--k-glow);">Go Shopping</a>
+        </div>
+    {% endif %}
+
+    <!-- Cart Items Loop -->
+    {% for item in cart %}
+    <div class="cart-item">
+        <div class="item-name">
+            {{ item.product.name }}
+        </div>
+        
+        <div class="item-math">
+            <!-- Example: 2 × $50.00 -->
+            {{ item.quantity }} × ${{ item.price }}
+        </div>
+
+        <div class="item-total">
+            <!-- Item total price -->
+            ${{ item.total_price }}
+        </div>
+
+        <a href="{% url 'cart_remove' item.product.id %}" class="btn-remove">
+            Remove
+        </a>
+    </div>
+    {% endfor %}
+
+    <!-- Divider -->
+    <hr>
+
+    <!-- Total Section -->
+    <div class="cart-summary">
+        <span class="total-label">Subtotal:</span>
+        <span class="grand-total">${{ cart.get_total_price }}</span>
+        
+        <!-- Optional Checkout Button Visual -->
+        <div style="margin-top: 20px;">
+            <a href="#" style="background: var(--k-glow); color: #000; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: bold; font-family: 'Orbitron'; box-shadow: 0 0 20px var(--k-blue);">
+                CHECKOUT
+            </a>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
